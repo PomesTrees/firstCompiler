@@ -1,72 +1,30 @@
-# ATM Example
+# UML del Cajero Automático (ATM)
+
+Este documento muestra los diagramas UML del sistema de cajero automático siguiendo el modelo **4+1 vistas** de Kruchten.
+
+---
+
+## 1. Vista de Escenarios (Casos de Uso)
 
 ```mermaid
-flowchart TD
-  A[Insert Card] --> B[Enter PIN]
-  B --> C{PIN Valid?}
-  C -->|Yes| D[Show Menu]
-  C -->|No| E[Reject Card]
+%% Diagrama de casos de uso
+flowchart TB
+  actor1([Cliente])
+  actor2([Banco/Host])
+  
+  subgraph ATM
+    CU1([Consultar saldo])
+    CU2([Retirar efectivo])
+    CU3([Depositar dinero])
+    CU4([Pagar servicio])
+  end
 
-classDiagram
-class Tarjeta {
-  +pan: String
-  +fechaExp: Date
-  +estado: EstadoTarjeta
-}
-
-class Cuenta {
-  +numero: String
-  +saldoDisponible: Money
-  +saldoContable: Money
-  +debitar(monto): boolean
-  +acreditar(monto): void
-}
-
-class Cliente {
-  +id: String
-  +nombre: String
-}
-
-class Transaccion {
-  <<abstract>>
-  +id: UUID
-  +fechaHora: DateTime
-  +monto: Money
-  +ejecutar(): ResultadoTx
-}
-
-class Retiro extends Transaccion
-class Deposito extends Transaccion
-class ConsultaSaldo extends Transaccion
-class PagoServicio extends Transaccion {
-  +servicio: String
-  +referencia: String
-}
-
-class ATM {
-  +id: String
-  +ubicacion: String
-}
-
-class Sesion {
-  +inicio: DateTime
-  +estado: EstadoSesion
-  +finalizar(): void
-}
-
-class HostBancario {
-  +autenticar(pan,pin): bool
-  +autorizar(tx): Autorizacion
-  +registrar(tx): void
-}
-
-Cliente "1" -- "0..*" Tarjeta
-Tarjeta "1" --> "1" Cuenta : asociada a
-Cuenta "1" <-- "0..*" Transaccion
-ATM "1" o-- "1" Sesion
-ATM "1" --> "1" HostBancario : ISO8583/API
-
-Retiro --> Cuenta : debitar()
-Deposito --> Cuenta : acreditar()
-ConsultaSaldo --> Cuenta
-PagoServicio --> Cuenta
+  actor1 --> CU1
+  actor1 --> CU2
+  actor1 --> CU3
+  actor1 --> CU4
+  
+  CU1 --> actor2
+  CU2 --> actor2
+  CU3 --> actor2
+  CU4 --> actor2
