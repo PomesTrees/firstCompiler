@@ -28,3 +28,39 @@ flowchart TB
   CU2 --> actor2
   CU3 --> actor2
   CU4 --> actor2
+
+%% Diagrama de clases simplificado
+classDiagram
+  class Cliente {
+    +id: String
+    +nombre: String
+  }
+  class Cuenta {
+    +numero: String
+    +saldo: float
+    +debitar(monto)
+    +acreditar(monto)
+  }
+  class Tarjeta {
+    +pan: String
+    +expira: Date
+  }
+  class Transaccion {
+    <<abstract>>
+    +id: int
+    +fecha: Date
+    +monto: float
+    +ejecutar()
+  }
+  class Retiro
+  class Deposito
+  class ConsultaSaldo
+  class PagoServicio
+
+  Cliente "1" -- "0..*" Tarjeta
+  Tarjeta "1" --> "1" Cuenta
+  Cuenta "1" <-- "0..*" Transaccion
+  Retiro --|> Transaccion
+  Deposito --|> Transaccion
+  ConsultaSaldo --|> Transaccion
+  PagoServicio --|> Transaccion
