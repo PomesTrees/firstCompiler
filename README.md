@@ -60,3 +60,57 @@ classDiagram
   BalanceInquiry --|> Transaction
   ServicePayment --|> Transaction
 ```
+```mermaid
+flowchart TD
+  A[Start] --> B[Insert Card]
+  B --> C[Validate PIN]
+  C -->|OK| D[Select 'Pay Service']
+  C -->|Error| Z[End with Error]
+  D --> E[Enter Service Info]
+  E --> F[Enter Amount]
+  F --> G{Bank Validation}
+  G -->|Approved| H[Register Transaction]
+  G -->|Rejected| Z[End with Error]
+  H --> I[Print Receipt]
+  I --> J[Return Card]
+  J --> K[End]
+```
+
+```mermaid
+flowchart LR
+  subgraph ATM_Software
+    UI[UI Module]
+    Session[Session Manager]
+    Tx[Transaction Orchestrator]
+    Drivers[Hardware Drivers]
+  end
+  
+  subgraph Bank
+    Host[Bank Host]
+    Accounts[Account Service]
+    Payments[Payment Engine]
+  end
+
+  UI --> Session --> Tx
+  Tx --> Drivers
+  Tx --> Host
+  Host --> Accounts
+  Host --> Payments
+```
+
+```mermaid
+flowchart TB
+  subgraph Branch
+    ATMNode[ATM Kiosk]
+    ATMApp[ATM Application]
+    ATMNode --> ATMApp
+  end
+
+  subgraph DataCenter
+    HostSys[Bank Host]
+    Services[Account + Payment Services]
+  end
+
+  ATMApp -->|VPN/TLS| HostSys
+  HostSys --> Services
+```
