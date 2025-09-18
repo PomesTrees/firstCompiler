@@ -1,22 +1,16 @@
-# UML del Cajero Automático (ATM)
+# ATM UML Diagrams (4+1 Views)
 
-Este documento muestra los diagramas UML del sistema de cajero automático siguiendo el modelo **4+1 vistas** de Kruchten.
-
----
-
-## 1. Vista de Escenarios (Casos de Uso)
-
+## 1. Use Case View
 ```mermaid
-%% Diagrama de casos de uso
 flowchart TB
-  actor1([Cliente])
-  actor2([Banco/Host])
+  actor1([Customer])
+  actor2([Bank/Host])
   
   subgraph ATM
-    CU1([Consultar saldo])
-    CU2([Retirar efectivo])
-    CU3([Depositar dinero])
-    CU4([Pagar servicio])
+    CU1([Check Balance])
+    CU2([Withdraw Cash])
+    CU3([Deposit Funds])
+    CU4([Pay Service])
   end
 
   actor1 --> CU1
@@ -28,39 +22,41 @@ flowchart TB
   CU2 --> actor2
   CU3 --> actor2
   CU4 --> actor2
+```
 
-%% Diagrama de clases simplificado
+```mermaid
 classDiagram
-  class Cliente {
+  class Customer {
     +id: String
-    +nombre: String
+    +name: String
   }
-  class Cuenta {
-    +numero: String
-    +saldo: float
-    +debitar(monto)
-    +acreditar(monto)
+  class Account {
+    +number: String
+    +balance: float
+    +debit(amount)
+    +credit(amount)
   }
-  class Tarjeta {
+  class Card {
     +pan: String
-    +expira: Date
+    +expiry: Date
   }
-  class Transaccion {
+  class Transaction {
     <<abstract>>
     +id: int
-    +fecha: Date
-    +monto: float
-    +ejecutar()
+    +date: Date
+    +amount: float
+    +execute()
   }
-  class Retiro
-  class Deposito
-  class ConsultaSaldo
-  class PagoServicio
+  class Withdraw
+  class Deposit
+  class BalanceInquiry
+  class ServicePayment
 
-  Cliente "1" -- "0..*" Tarjeta
-  Tarjeta "1" --> "1" Cuenta
-  Cuenta "1" <-- "0..*" Transaccion
-  Retiro --|> Transaccion
-  Deposito --|> Transaccion
-  ConsultaSaldo --|> Transaccion
-  PagoServicio --|> Transaccion
+  Customer "1" -- "0..*" Card
+  Card "1" --> "1" Account
+  Account "1" <-- "0..*" Transaction
+  Withdraw --|> Transaction
+  Deposit --|> Transaction
+  BalanceInquiry --|> Transaction
+  ServicePayment --|> Transaction
+```
