@@ -1,3 +1,12 @@
+# ATM Example
+
+```mermaid
+flowchart TD
+  A[Insert Card] --> B[Enter PIN]
+  B --> C{PIN Valid?}
+  C -->|Yes| D[Show Menu]
+  C -->|No| E[Reject Card]
+
 classDiagram
 class Tarjeta {
   +pan: String
